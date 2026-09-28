@@ -1,0 +1,40 @@
+config { description: documentacao.assertions["assert_raw_integridade"], type: "assertion", schema: "analytics_assertions" }
+
+-- Objetivo: Encontrar relacionamentos ausentes, IDs vazios e descrições conflitantes.
+-- Uma assertion é aprovada quando esta consulta retorna zero linhas.
+-- Cada bloco devolve a categoria e a referência do registro a corrigir.
+SELECT 'item_sem_atendimento' AS problema, i.id_item AS referencia
+FROM ${ref("stg_procedimentos_itens")} i
+LEFT JOIN ${ref("stg_atendimentos")} a USING (id_atendimento)
+WHERE a.id_atendimento IS NULL
+UNION ALL
+SELECT 'atendimento_sem_paciente', a.id_atendimento
+FROM ${ref("stg_atendimentos")} a
+LEFT JOIN ${ref("stg_cadastro_pacientes")} p USING (id_paciente)
+WHERE p.id_paciente IS NULL
+UNION ALL
+SELECT 'atendimento_sem_item', a.id_atendimento
+FROM ${ref("stg_atendimentos")} a
+LEFT JOIN ${ref("stg_procedimentos_itens")} i USING (id_atendimento)
+WHERE i.id_item IS NULL
+UNION ALL
+SELECT 'atendimento_identificador_vazio', a.id_atendimento
+FROM ${ref("stg_atendimentos")} a
+WHERE TRIM(a.id_atendimento) = '' OR TRIM(a.id_paciente) = ''
+   OR TRIM(a.id_unidade) = '' OR TRIM(a.tipo_atendimento) = '' OR TRIM(a.status) = ''
+UNION ALL
+SELECT 'item_identificador_vazio', i.id_item
+FROM ${ref("stg_procedimentos_itens")} i
+WHERE TRIM(i.id_item) = '' OR TRIM(i.id_atendimento) = ''
+   OR TRIM(i.codigo_procedimento) = '' OR TRIM(i.id_medico_executante) = ''
+   OR i.nome_procedimento IS NULL OR TRIM(i.nome_procedimento) = ''
+UNION ALL
+SELECT 'paciente_identificador_vazio', p.id_paciente
+FROM ${ref("stg_cadastro_pacientes")} p
+WHERE TRIM(p.id_paciente) = ''
+UNION ALL
+-- Um código com nomes diferentes não deve ser ocultado pelo MIN da dimensão.
+SELECT 'procedimento_nome_conflitante', codigo_procedimento
+FROM ${ref("stg_procedimentos_itens")}
+GROUP BY codigo_procedimento
+HAVING COUNT(DISTINCT nome_procedimento) > 1

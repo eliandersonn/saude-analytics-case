@@ -1,0 +1,13 @@
+config {
+  ...documentacao.tabela("dim_medico", ["sk_medico", "id_medico_executante"]),
+  // Objetivo: Criar uma linha por executante, usando apenas o identificador disponível.
+  type: "table",
+  schema: "analytics",
+  assertions: { uniqueKey: ["sk_medico"], nonNull: ["sk_medico", "id_medico_executante"] }
+}
+
+-- DISTINCT evita repetir o executante; ROW_NUMBER atribui sua SK (chave técnica).
+SELECT
+  ROW_NUMBER() OVER (ORDER BY id_medico_executante) AS sk_medico,
+  id_medico_executante
+FROM (SELECT DISTINCT id_medico_executante FROM ${ref("stg_procedimentos_itens")})

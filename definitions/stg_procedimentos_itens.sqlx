@@ -1,0 +1,20 @@
+config {
+  ...documentacao.tabela("stg_procedimentos_itens", ["id_item", "id_atendimento", "codigo_procedimento", "nome_procedimento", "id_medico_executante", "valor_item"]),
+  // Objetivo: Preparar os itens e seus valores para o rateio e a construção das dimensões.
+  type: "table",
+  schema: "staging",
+  assertions: {
+    uniqueKey: ["id_atendimento", "id_item"],
+    nonNull: ["id_atendimento", "id_item", "codigo_procedimento", "id_medico_executante", "valor_item"]
+  }
+}
+
+-- NUMERIC mantém precisão decimal. Valores não conversíveis viram NULL e falham nos testes.
+SELECT
+  CAST(id_item AS STRING) AS id_item,
+  CAST(id_atendimento AS STRING) AS id_atendimento,
+  CAST(codigo_procedimento AS STRING) AS codigo_procedimento,
+  CAST(nome_procedimento AS STRING) AS nome_procedimento,
+  CAST(id_medico_executante AS STRING) AS id_medico_executante,
+  SAFE_CAST(valor_item AS NUMERIC) AS valor_item
+FROM ${ref("raw_procedimentos_itens")}

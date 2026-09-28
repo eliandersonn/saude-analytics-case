@@ -1,0 +1,8 @@
+config {
+  ...documentacao.tabela("raw_procedimentos_itens", ["id_item", "id_atendimento", "codigo_procedimento", "nome_procedimento", "id_medico_executante", "valor_item"]),
+  // Objetivo: Declarar os itens de origem que definem o detalhe da tabela fato.
+  type: "declaration",
+  database: dataform.projectConfig.defaultDatabase,
+  schema: dataform.projectConfig.vars.rawDataset || "raw",
+  name: "raw_procedimentos_itens"
+}

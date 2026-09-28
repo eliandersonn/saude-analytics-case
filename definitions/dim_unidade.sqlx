@@ -1,0 +1,13 @@
+config {
+  ...documentacao.tabela("dim_unidade", ["sk_unidade", "id_unidade"]),
+  // Objetivo: Criar uma linha por unidade para permitir recortes por local de atendimento.
+  type: "table",
+  schema: "analytics",
+  assertions: { uniqueKey: ["sk_unidade"], nonNull: ["sk_unidade", "id_unidade"] }
+}
+
+-- DISTINCT evita repetir a unidade; ROW_NUMBER atribui sua SK (chave técnica).
+SELECT
+  ROW_NUMBER() OVER (ORDER BY id_unidade) AS sk_unidade,
+  id_unidade
+FROM (SELECT DISTINCT id_unidade FROM ${ref("stg_atendimentos")})

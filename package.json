@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "dependencies": {
+    "@dataform/core": "3.0.71"
+  },
+  "devDependencies": {
+    "@dataform/cli": "3.0.71"
+  }
+}

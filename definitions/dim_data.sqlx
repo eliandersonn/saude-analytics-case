@@ -1,0 +1,21 @@
+config {
+  ...documentacao.tabela("dim_data", ["sk_data", "data", "ano", "mes", "dia", "trimestre"]),
+  // Objetivo: Criar um calendário contínuo entre o primeiro e o último atendimento.
+  type: "table",
+  schema: "analytics",
+  assertions: { uniqueKey: ["sk_data"], nonNull: ["sk_data", "data"] }
+}
+
+-- A chave AAAAMMDD é legível e os atributos permitem agrupar por mês, trimestre ou ano.
+SELECT
+  CAST(FORMAT_DATE('%Y%m%d', data) AS INT64) AS sk_data,
+  data,
+  EXTRACT(YEAR FROM data) AS ano,
+  EXTRACT(MONTH FROM data) AS mes,
+  EXTRACT(DAY FROM data) AS dia,
+  EXTRACT(QUARTER FROM data) AS trimestre
+-- Incluir também dias sem eventos para manter o calendário contínuo no período da amostra.
+FROM UNNEST(GENERATE_DATE_ARRAY(
+  (SELECT MIN(DATE(data_hora_atendimento)) FROM ${ref("stg_atendimentos")}),
+  (SELECT MAX(DATE(data_hora_atendimento)) FROM ${ref("stg_atendimentos")})
+)) AS data

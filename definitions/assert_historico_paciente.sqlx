@@ -1,0 +1,34 @@
+config { description: documentacao.assertions["assert_historico_paciente"], type: "assertion", schema: "analytics_assertions" }
+
+-- Objetivo: Sinalizar conflitos cadastrais e versões que violam as regras verificadas abaixo.
+-- Uma assertion é aprovada quando esta consulta retorna zero linhas.
+WITH repeticao_instante AS (
+  -- Mais de um cadastro diferente no mesmo instante torna a ordem histórica ambígua.
+  SELECT id_paciente
+  FROM ${ref("stg_cadastro_pacientes")}
+  GROUP BY id_paciente, data_atualizacao
+  HAVING COUNT(*) > 1
+),
+versoes_invalidas AS (
+  -- Exigir uma versão atual, intervalos positivos e até uma versão desconhecida.
+  SELECT id_paciente
+  FROM ${ref("dim_paciente")}
+  GROUP BY id_paciente
+  HAVING COUNTIF(versao_atual) != 1
+     OR COUNTIF(inicio_vigencia >= fim_vigencia) > 0
+     OR COUNTIF(historico_desconhecido) > 1
+),
+limites AS (
+  -- O fim de cada versão deve coincidir com o início da próxima: sem lacuna ou sobreposição.
+  SELECT id_paciente, inicio_vigencia,
+    LAG(fim_vigencia) OVER janela AS fim_anterior,
+    ROW_NUMBER() OVER janela AS ordem
+  FROM ${ref("dim_paciente")}
+  WINDOW janela AS (PARTITION BY id_paciente ORDER BY inicio_vigencia NULLS FIRST)
+)
+SELECT id_paciente FROM repeticao_instante
+UNION ALL
+SELECT id_paciente FROM versoes_invalidas
+UNION ALL
+SELECT id_paciente FROM limites
+WHERE ordem > 1 AND fim_anterior IS DISTINCT FROM inicio_vigencia

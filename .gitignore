@@ -1,0 +1,6 @@
+node_modules/
+.df-credentials.json
+.dataform/
+*.log
+.validacao/
+entrega/

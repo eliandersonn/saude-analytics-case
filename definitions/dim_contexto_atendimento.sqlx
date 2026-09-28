@@ -1,0 +1,14 @@
+config {
+  ...documentacao.tabela("dim_contexto_atendimento", ["sk_contexto_atendimento", "tipo_atendimento", "status"]),
+  // Objetivo: Reunir cada combinação de tipo e status em uma dimensão compacta.
+  type: "table",
+  schema: "analytics",
+  assertions: { uniqueKey: ["sk_contexto_atendimento"], nonNull: ["sk_contexto_atendimento"] }
+}
+
+-- Uma SK identifica o par tipo/status, evitando repetir esses textos na fato.
+SELECT
+  ROW_NUMBER() OVER (ORDER BY tipo_atendimento, status) AS sk_contexto_atendimento,
+  tipo_atendimento,
+  status
+FROM (SELECT DISTINCT tipo_atendimento, status FROM ${ref("stg_atendimentos")})

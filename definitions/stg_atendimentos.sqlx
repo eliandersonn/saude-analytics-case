@@ -1,0 +1,24 @@
+config {
+  ...documentacao.tabela("stg_atendimentos", ["id_atendimento", "id_paciente", "data_hora_atendimento", "tipo_atendimento", "id_unidade", "status", "valor_bruto", "desconto", "valor_liquido"]),
+  // Objetivo: Converter os tipos da origem e preservar todos os status para análise.
+  type: "table",
+  schema: "staging",
+  assertions: {
+    uniqueKey: ["id_atendimento"],
+    nonNull: ["id_atendimento", "id_paciente", "data_hora_atendimento", "valor_bruto", "desconto", "valor_liquido"]
+  }
+}
+
+-- SAFE_CAST transforma datas/números inválidos em NULL, detectado pelos testes obrigatórios.
+-- Sem fuso na origem, a conversão para TIMESTAMP adota UTC.
+SELECT
+  CAST(id_atendimento AS STRING) AS id_atendimento,
+  CAST(id_paciente AS STRING) AS id_paciente,
+  SAFE_CAST(data_hora_atendimento AS TIMESTAMP) AS data_hora_atendimento,
+  CAST(tipo_atendimento AS STRING) AS tipo_atendimento,
+  CAST(id_unidade AS STRING) AS id_unidade,
+  CAST(status AS STRING) AS status,
+  SAFE_CAST(valor_bruto AS NUMERIC) AS valor_bruto,
+  SAFE_CAST(desconto AS NUMERIC) AS desconto,
+  SAFE_CAST(valor_liquido AS NUMERIC) AS valor_liquido
+FROM ${ref("raw_atendimentos")}

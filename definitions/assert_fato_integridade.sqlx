@@ -1,0 +1,30 @@
+config { description: documentacao.assertions["assert_fato_integridade"], type: "assertion", schema: "analytics_assertions" }
+
+-- Objetivo: Identificar SKs sem dimensão e inconsistências nos valores de cada item.
+-- Uma assertion é aprovada quando esta consulta retorna zero linhas.
+-- LEFT JOIN mantém o item mesmo sem correspondência, permitindo localizar a SK ausente.
+-- Comparar também a versão do paciente e a data da fato com o atendimento de origem.
+SELECT f.id_atendimento, f.id_item
+FROM ${ref("fato_atendimento_item")} f
+LEFT JOIN ${ref("stg_atendimentos")} a USING (id_atendimento)
+LEFT JOIN ${ref("dim_paciente")} p USING (sk_paciente)
+LEFT JOIN ${ref("dim_procedimento")} proc USING (sk_procedimento)
+LEFT JOIN ${ref("dim_unidade")} u USING (sk_unidade)
+LEFT JOIN ${ref("dim_medico")} m USING (sk_medico)
+LEFT JOIN ${ref("dim_data")} d USING (sk_data)
+LEFT JOIN ${ref("dim_contexto_atendimento")} c USING (sk_contexto_atendimento)
+WHERE p.sk_paciente IS NULL OR proc.sk_procedimento IS NULL
+   OR u.sk_unidade IS NULL OR m.sk_medico IS NULL
+   OR d.sk_data IS NULL OR c.sk_contexto_atendimento IS NULL
+   OR a.id_atendimento IS NULL
+   OR f.data_hora_atendimento IS DISTINCT FROM a.data_hora_atendimento
+   OR d.data IS DISTINCT FROM DATE(f.data_hora_atendimento)
+   OR p.id_paciente IS DISTINCT FROM a.id_paciente
+   OR (p.historico_desconhecido AND
+      (p.inicio_vigencia IS NOT NULL OR p.fim_vigencia IS NULL
+       OR f.data_hora_atendimento >= p.fim_vigencia))
+   OR (NOT p.historico_desconhecido AND
+      (p.inicio_vigencia IS NULL OR f.data_hora_atendimento < p.inicio_vigencia
+       OR (p.fim_vigencia IS NOT NULL AND f.data_hora_atendimento >= p.fim_vigencia)))
+   OR f.valor_bruto_item < 0 OR f.desconto_rateado_item < 0
+   OR f.valor_bruto_item != f.desconto_rateado_item + f.valor_liquido_item

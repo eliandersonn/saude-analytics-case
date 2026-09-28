@@ -1,0 +1,19 @@
+config {
+  ...documentacao.tabela("stg_cadastro_pacientes", ["id_paciente", "nome", "plano_saude", "cidade", "data_atualizacao"]),
+  // Objetivo: Padronizar o cadastro e remover somente registros totalmente idênticos.
+  type: "table",
+  schema: "staging",
+  assertions: {
+    nonNull: ["id_paciente", "data_atualizacao"]
+  }
+}
+
+-- DISTINCT não elimina versões diferentes; conflitos no mesmo instante têm teste próprio.
+-- SAFE_CAST permite identificar datas inválidas pelo teste de campo obrigatório.
+SELECT DISTINCT
+  CAST(id_paciente AS STRING) AS id_paciente,
+  CAST(nome AS STRING) AS nome,
+  CAST(plano_saude AS STRING) AS plano_saude,
+  CAST(cidade AS STRING) AS cidade,
+  SAFE_CAST(data_atualizacao AS TIMESTAMP) AS data_atualizacao
+FROM ${ref("raw_cadastro_pacientes")}

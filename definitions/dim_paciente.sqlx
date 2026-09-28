@@ -1,0 +1,69 @@
+config {
+  ...documentacao.tabela("dim_paciente", ["sk_paciente", "id_paciente", "nome", "plano_saude", "cidade", "inicio_vigencia", "fim_vigencia", "historico_desconhecido", "versao_atual"]),
+  // Objetivo: Preservar as versões cadastrais para consultar o plano na data do atendimento.
+  type: "table",
+  schema: "analytics",
+  assertions: {
+    uniqueKey: ["sk_paciente"],
+    nonNull: ["sk_paciente", "id_paciente"]
+  }
+}
+
+-- 1. Comparar cada atualização com a anterior do mesmo paciente.
+WITH ordenado AS (
+  SELECT
+    *,
+    LAG(nome) OVER janela AS nome_anterior,
+    LAG(plano_saude) OVER janela AS plano_anterior,
+    LAG(cidade) OVER janela AS cidade_anterior,
+    ROW_NUMBER() OVER janela AS ordem
+  FROM ${ref("stg_cadastro_pacientes")}
+  WINDOW janela AS (PARTITION BY id_paciente ORDER BY data_atualizacao)
+),
+mudancas AS (
+  -- 2. Manter a primeira versão e apenas mudanças reais, inclusive envolvendo NULL.
+  SELECT id_paciente, nome, plano_saude, cidade, data_atualizacao
+  FROM ordenado
+  WHERE ordem = 1
+    OR nome IS DISTINCT FROM nome_anterior
+    OR plano_saude IS DISTINCT FROM plano_anterior
+    OR cidade IS DISTINCT FROM cidade_anterior
+),
+versoes AS (
+  -- 3. SK (chave técnica) = ID + versão. LEAD encerra a vigência na próxima mudança.
+  -- A sequência pode mudar com dados retroativos, pois este case reconstrói as tabelas.
+  SELECT
+    CONCAT(id_paciente, '_', CAST(ROW_NUMBER() OVER janela AS STRING)) AS sk_paciente,
+    id_paciente, nome, plano_saude, cidade,
+    data_atualizacao AS inicio_vigencia,
+    LEAD(data_atualizacao) OVER janela AS fim_vigencia,
+    FALSE AS historico_desconhecido
+  FROM mudancas
+  WINDOW janela AS (PARTITION BY id_paciente ORDER BY data_atualizacao)
+),
+primeiro_cadastro AS (
+  -- 4. Encontrar o limite a partir do qual existe informação cadastral conhecida.
+  SELECT id_paciente, MIN(data_atualizacao) AS primeira_atualizacao
+  FROM ${ref("stg_cadastro_pacientes")}
+  GROUP BY id_paciente
+),
+sem_historico AS (
+  -- 5. Reservar a versão zero para eventos anteriores ao cadastro, sem inventar plano.
+  SELECT
+    CONCAT(a.id_paciente, '_0') AS sk_paciente,
+    a.id_paciente,
+    CAST(NULL AS STRING) AS nome,
+    CAST(NULL AS STRING) AS plano_saude,
+    CAST(NULL AS STRING) AS cidade,
+    CAST(NULL AS TIMESTAMP) AS inicio_vigencia,
+    p.primeira_atualizacao AS fim_vigencia,
+    TRUE AS historico_desconhecido
+  FROM ${ref("stg_atendimentos")} a
+  JOIN primeiro_cadastro p USING (id_paciente)
+  WHERE a.data_hora_atendimento < p.primeira_atualizacao
+  GROUP BY a.id_paciente, p.primeira_atualizacao
+)
+-- Só a última versão conhecida é atual; a versão desconhecida termina no primeiro cadastro.
+SELECT *, fim_vigencia IS NULL AS versao_atual FROM versoes
+UNION ALL
+SELECT *, FALSE AS versao_atual FROM sem_historico

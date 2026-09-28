@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apresentação · Analytics Engineering em Saúde</title>
+<style>
+/* Slides 16:9, com a paleta Dasa e sem dependências externas. */
+:root{--navy:#000f40;--coral:#ff4f33;--muted:#536078;--line:#d5dce7;--scale:1}
+*{box-sizing:border-box}body{margin:0;background:#e6e9ef;color:var(--navy);font-family:"Segoe UI",Arial,sans-serif}h1,h2,h3,p{margin:0}.stage{width:1280px;margin:auto}.slide{height:720px;padding:48px 64px 36px;background:white;display:flex;flex-direction:column;overflow:hidden}.slide[hidden]{display:none}header,footer{display:flex;justify-content:space-between;gap:24px;font-size:16px}header{margin-bottom:34px;text-transform:uppercase;letter-spacing:.09em}header span:first-child{color:var(--coral);font-weight:650}footer{margin-top:auto;padding-top:22px;color:var(--muted);line-height:1.4}footer span:last-child{white-space:nowrap}h1{font-size:62px;line-height:1.08;letter-spacing:-2px;max-width:1050px}h2{font-size:45px;line-height:1.15;letter-spacing:-1.2px}h3{font-size:26px;margin-bottom:14px}.lead{font-size:24px;line-height:1.45;color:var(--muted);margin-top:16px}.content{padding-top:34px}.two{display:grid;grid-template-columns:1fr 1fr;gap:52px}.body{font-size:25px;line-height:1.5}.small{font-size:20px;line-height:1.45}.rule{border-top:3px solid var(--coral);padding-top:20px}.callout{margin-top:28px;padding:18px 22px;background:#f2f4f8;border-left:4px solid var(--coral);font-size:23px;line-height:1.4}.metrics{display:flex;gap:56px;margin:36px 0 32px}.metric{flex:1}.metric strong{display:block;font-size:68px;font-weight:600;letter-spacing:-2px}.metric p{font-size:22px;margin-top:8px}.dark{background:var(--navy);color:white}.dark .lead,.dark footer{color:#c7d0e3}.dark header span:first-child,.dark .accent{color:#ff8b78}.dark .callout{background:#14244f}.accent{color:var(--coral)}table{border-collapse:collapse;width:100%;font-size:24px;line-height:1.4}th{text-align:left;font-size:17px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--navy);padding:0 18px 14px 0}td{border-bottom:1px solid var(--line);padding:16px 18px 16px 0;vertical-align:top}tr:last-child td{border:0}.diagram{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:32px;align-items:center}.dims{display:grid;gap:18px}.dim{background:#f2f4f8;padding:18px;font-size:24px;border-left:3px solid var(--coral)}.fact{background:var(--navy);color:white;padding:28px;font-size:23px;line-height:1.5}.fact h3{font-size:30px}.formula{font-size:29px;line-height:1.45;margin-bottom:25px}.version{font-family:Consolas,monospace;font-size:26px;margin-bottom:16px}.flow{font-size:29px;line-height:1.6;border-top:3px solid var(--coral);border-bottom:1px solid var(--line);padding:20px 0;margin-bottom:28px}.amount{font-size:40px;font-weight:600;margin:12px 0}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+/* A escala mantém a composição; o teclado troca apenas o slide visível. */
+body.ready{overflow:hidden}.ready .viewport{position:fixed;inset:0;display:grid;place-items:center}.ready .stage{position:relative;height:720px;flex-shrink:0;transform:scale(var(--scale));transform-origin:center}.ready .slide{position:absolute;inset:0}
+@media print{@page{size:13.333in 7.5in;margin:0}body.ready{overflow:visible}.ready .viewport{position:static;display:block}.ready .stage{height:auto;transform:none}.ready .slide,.slide[hidden]{display:flex;position:relative;break-after:page;print-color-adjust:exact;-webkit-print-color-adjust:exact}.slide:last-child{break-after:auto}#announcement{display:none}}
+</style>
+</head>
+<body>
+<div class="viewport"><main class="stage" aria-label="Apresentação do case">
+
+<section class="slide dark" aria-labelledby="s1">
+<header><span>Analytics Engineering em Saúde</span><span>Case técnico · Dasa</span></header>
+<h1 id="s1">Histórico confiável e valores<br>reconciliados por procedimento</h1>
+<p class="lead">Kimball + Dataform + BigQuery para rastrear o atendimento e apoiar o BI.</p>
+<div class="metrics"><div class="metric"><strong>60</strong><p>atendimentos</p></div><div class="metric"><strong>155</strong><p>itens reconciliados</p></div><div class="metric"><strong class="accent">20</strong><p>itens anteriores ao<br>primeiro cadastro</p></div></div>
+<p class="body">Insight: a amostra fecha financeiramente, mas parte do histórico<br>é desconhecida. A solução preserva essa ausência sem inventar um plano.</p>
+<footer><span>Partes 1 e 2 executadas · Partes 3 e 4 propostas conforme o PDF</span><span>01 / 08</span></footer>
+</section>
+
+<section class="slide" aria-labelledby="s2">
+<header><span>Parte 1 · Modelo dimensional</span><span>Grão e medidas</span></header>
+<h2 id="s2">Uma linha na fato = um item do atendimento</h2>
+<p class="lead">Chave de negócio: atendimento + item. O ID do atendimento fica na própria fato.</p>
+<div class="content diagram"><div class="dims"><div class="dim">Paciente · histórico</div><div class="dim">Procedimento</div><div class="dim">Unidade</div></div><div class="fact"><h3>Fato atendimento item</h3><p>Seis chaves de dimensão<br>Valor bruto do item<br>Desconto rateado<br>Valor líquido do item</p></div><div class="dims"><div class="dim">Médico executante</div><div class="dim">Data</div><div class="dim">Contexto · tipo/status</div></div></div>
+<div class="callout">Por que esse grão? Permite analisar procedimentos e médicos sem repetir o valor total do atendimento em cada linha.</div>
+<footer><span>Somar valores dos itens · Contar atendimentos e pacientes por ID distinto</span><span>02 / 08</span></footer>
+</section>
+
+<section class="slide" aria-labelledby="s3">
+<header><span>Parte 1 · Histórico do paciente</span><span>SK + SCD Tipo 2</span></header>
+<h2 id="s3">Cada mudança gera uma versão do paciente</h2>
+<p class="lead"><strong>SK:</strong> chave técnica da versão. <strong>SCD Tipo 2:</strong> histórico preservado em novas linhas.</p>
+<div class="content two"><article class="rule"><p class="version">PAC_001_1</p><h3>Unimed Premium</h3><p class="body">De 10/01/2024 às 08:30<br>até antes de 15/06/2024 às 14:20.</p></article><article class="rule"><p class="version">PAC_001_2</p><h3>Bradesco Saúde Top</h3><p class="body">A partir de 15/06/2024 às 14:20.<br>A versão anterior fica preservada.</p></article></div>
+<div class="callout">O atendimento usa a versão vigente naquele instante: início inclusivo e fim exclusivo. Antes do primeiro cadastro, usa a versão <strong>_0</strong>, com atributos desconhecidos.</div>
+<footer><span>18 versões: 13 conhecidas + 5 desconhecidas. Atualização cadastral aproxima vigência.<br>SK simples serve à carga completa; histórico tardio pode renumerá-la.</span><span>03 / 08</span></footer>
+</section>
+
+<section class="slide" aria-labelledby="s4">
+<header><span>Parte 2 · Transformação e qualidade</span><span>Dataform executado</span></header>
+<h2 id="s4">O desconto acompanha o peso de cada item</h2>
+<div class="content"><p class="formula">Desconto do item = desconto do atendimento × item ÷ soma dos itens</p>
+<div class="two"><article><h3>Exemplo: desconto de R$ 40</h3><table><thead><tr><th>Item bruto</th><th>Desconto</th><th>Líquido</th></tr></thead><tbody><tr><td>R$ 100</td><td>R$ 10</td><td>R$ 90</td></tr><tr><td>R$ 300</td><td>R$ 30</td><td>R$ 270</td></tr></tbody></table><p class="small" style="margin-top:18px">Centavos restantes vão aos maiores restos; desempate pelo ID do item.</p></article><article class="rule"><h3>24 assertions aprovadas</h3><p class="body">Unicidade, não nulos, relações,<br>histórico e reconciliação.</p><p class="amount">R$ 38.517,75</p><p class="small">Líquido de todos os status.<br>Somente concluídos: <strong>R$ 32.421,25</strong>.</p></article></div></div>
+<footer><span>CSV → raw → staging → dimensões/fato · 10 tabelas<br>Insight: líquido não é recebimento; o indicador precisa explicitar o filtro de status.</span><span>04 / 08</span></footer>
+</section>
+
+<section class="slide" aria-labelledby="s5">
+<header><span>Parte 3 · BigQuery e FinOps</span><span>Decisão de arquitetura</span></header>
+<h2 id="s5">Otimizar conforme volume e filtros do BI</h2>
+<div class="content two"><article class="rule"><h3>Hoje: 155 itens</h3><p class="body">Fato e dimensões sem partição<br>ou clustering.</p><p class="lead">A amostra é pequena; não há<br>economia de leitura demonstrada.</p></article><article class="rule"><h3>Com crescimento</h3><p class="body">Fato: partição mensal por data;<br>diária se o volume justificar.</p><p class="lead">Clustering: unidade → procedimento,<br>se os filtros usarem essas chaves.</p></article></div>
+<div class="callout">FinOps: selecionar colunas, filtrar a data diretamente na fato e limitar bytes faturáveis. Comparar bytes lidos e latência antes de afirmar economia.</div>
+<footer><span>Dimensões pequenas permanecem simples. Avaliar clustering por ID na dimensão Paciente se crescer.</span><span>05 / 08</span></footer>
+</section>
+
+<section class="slide" aria-labelledby="s6">
+<header><span>Parte 3 · Snowflake</span><span>Alternativa proposta</span></header>
+<h2 id="s6">Separar computação de transformação e BI</h2>
+<p class="lead">Warehouses independentes isolam a disputa por recursos e permitem atribuir custos.</p>
+<div class="content"><table><thead><tr><th>Configuração inicial</th><th>Transformação</th><th>BI / consultas ad-hoc</th></tr></thead><tbody><tr><td>Tamanho</td><td>Small; comparar com Medium</td><td>X-Small; medir latência</td></tr><tr><td>Auto-suspend / resume</td><td>60 s / ativado</td><td>300 s / ativado</td></tr><tr><td>Clusters</td><td>1</td><td>1; testar 1–2 se houver fila</td></tr></tbody></table></div>
+<div class="callout">Tamanho atende consultas pesadas. Multi-cluster atende concorrência e exige Enterprise ou superior. Ajustar usando créditos, fila e latência.</div>
+<footer><span>Snowflake não implantado. Suspensão perde cache local; retomada tem cobrança mínima de 60 s.</span><span>06 / 08</span></footer>
+</section>
+
+<section class="slide" aria-labelledby="s7">
+<header><span>Parte 4 · CI/CD e governança</span><span>Fluxo proposto</span></header>
+<h2 id="s7">Validar em isolamento antes de promover</h2>
+<div class="content"><p class="flow">Branch → PR → compilar → executar e testar<br>em datasets isolados → revisão → main → release</p><div class="two"><article><h3>Por que CI completo?</h3><p class="body">Com dez tabelas, é simples validar tudo. Falhas bloqueiam a promoção.</p><p class="small" style="margin-top:18px">Slim CI, no futuro: executar mudanças, dependentes e testes; manter as demais dependências disponíveis.</p></article><article><h3>Como governar?</h3><p class="body">Versionar código, testes e catálogo. Registrar grão, medidas, linhagem e responsável.</p><p class="small" style="margin-top:18px">Identidade de CI sem escrita em produção; credenciais fora do Git; acesso mínimo.</p></article></div></div>
+<footer><span>GitHub Actions proposto · Pipeline e proteção de main ainda não implantados</span><span>07 / 08</span></footer>
+</section>
+
+<section class="slide dark" aria-labelledby="s8">
+<header><span>Conclusões e limites</span><span>Defesa técnica</span></header>
+<h2 id="s8">A amostra está validada; produção exige evolução</h2>
+<div class="content two"><article class="rule"><h3>O que o case demonstra</h3><p class="body">155 itens reconciliados.<br>Plano histórico por vigência.<br>24 testes aprovados.</p><p class="lead">A falta de cadastro é visível.<br>O filtro de status muda o indicador.</p></article><article class="rule"><h3>O que falta endurecer</h3><p class="body">Automatizar cenários sintéticos e bloquear a publicação em caso de falha.</p><p class="lead">Garantir retorno de versão,<br>acesso granular e SK estável no incremental.</p></article></div>
+<div class="callout">Segurança: SK não anonimiza o paciente. Restringir identidade também em raw e staging. Este case usa dados simulados e não está homologado para produção.</div>
+<footer><span>Detalhes, evidências e premissas em SOLUCAO_TECNICA.md · 24 min + 6 min para perguntas</span><span>08 / 08</span></footer>
+</section>
+</main></div>
+<p id="announcement" class="sr-only" aria-live="polite"></p>
+<script>
+// Mantém o slide no endereço para permitir reabrir um ponto da apresentação.
+const slides = [...document.querySelectorAll('.slide')];
+let current = 0;
+function show(index) {
+  current = Math.max(0, Math.min(slides.length - 1, index));
+  slides.forEach((slide, i) => {
+    slide.hidden = i !== current;
+    slide.setAttribute('aria-hidden', String(i !== current));
+  });
+  history.replaceState(null, '', '#slide-' + (current + 1));
+  document.getElementById('announcement').textContent = `Slide ${current + 1} de ${slides.length}: ${slides[current].querySelector('h1,h2').textContent}`;
+}
+function fromHash() {
+  const match = location.hash.match(/^#slide-(\d+)$/);
+  show(match ? Number(match[1]) - 1 : 0);
+}
+// Ajusta a tela sem alterar fontes, proporções ou distribuição dos elementos.
+function fit() {
+  document.documentElement.style.setProperty('--scale', Math.min(innerWidth / 1280, innerHeight / 720));
+}
+document.addEventListener('keydown', event => {
+  if (event.ctrlKey || event.metaKey || event.altKey) return;
+  const targets = {ArrowRight:current+1, ArrowDown:current+1, PageDown:current+1, ' ':current+1, ArrowLeft:current-1, ArrowUp:current-1, PageUp:current-1, Home:0, End:slides.length-1};
+  if (!(event.key in targets)) return;
+  event.preventDefault();
+  show(targets[event.key]);
+});
+window.addEventListener('resize', fit);
+window.addEventListener('hashchange', fromHash);
+document.body.classList.add('ready');
+fit();
+fromHash();
+</script>
+</body>
+</html>

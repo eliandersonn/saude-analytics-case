@@ -1,0 +1,8 @@
+# Destino padrao; os parametros do CLI permitem executar em outro projeto.
+defaultProject: saude-analytics
+# Os SQLX podem definir schemas proprios, como staging e analytics.
+defaultDataset: analytics
+# Manter a mesma localizacao das tabelas de origem para permitir as consultas.
+defaultLocation: southamerica-east1
+# Dataset das assertions geradas automaticamente pelas configuracoes de qualidade.
+defaultAssertionDataset: analytics_assertions

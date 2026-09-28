@@ -1,0 +1,8 @@
+config {
+  ...documentacao.tabela("raw_atendimentos", ["id_atendimento", "id_paciente", "data_hora_atendimento", "tipo_atendimento", "id_unidade", "status", "valor_bruto", "desconto", "valor_liquido"]),
+  // Objetivo: Declarar a tabela de atendimentos já carregada no BigQuery, sem recriá-la.
+  type: "declaration",
+  database: dataform.projectConfig.defaultDatabase,
+  schema: dataform.projectConfig.vars.rawDataset || "raw",
+  name: "raw_atendimentos"
+}

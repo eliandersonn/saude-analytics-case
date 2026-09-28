@@ -1,0 +1,84 @@
+config {
+  ...documentacao.tabela("fato_atendimento_item", ["sk_item", "id_atendimento", "id_item", "sk_paciente", "sk_procedimento", "sk_unidade", "sk_medico", "sk_data", "sk_contexto_atendimento", "data_hora_atendimento", "valor_bruto_item", "desconto_rateado_item", "valor_liquido_item"]),
+  // Objetivo: Criar uma linha por item com desconto rateado e contexto dimensional.
+  type: "table",
+  schema: "analytics",
+  assertions: {
+    uniqueKey: ["id_atendimento", "id_item"],
+    nonNull: ["id_atendimento", "id_item", "sk_paciente", "sk_procedimento", "sk_unidade", "sk_medico", "sk_data", "sk_contexto_atendimento", "valor_liquido_item"]
+  }
+}
+
+-- 1. Associar itens ao cabeçalho e converter valores para centavos inteiros.
+-- O desconto do cabeçalho será distribuído; ele não será repetido como medida somável.
+WITH itens AS (
+  SELECT
+    a.id_atendimento,
+    i.id_item,
+    a.id_paciente,
+    a.data_hora_atendimento,
+    a.id_unidade,
+    a.tipo_atendimento,
+    a.status,
+    i.codigo_procedimento,
+    i.id_medico_executante,
+    i.valor_item,
+    CAST(ROUND(i.valor_item * 100) AS INT64) AS valor_item_centavos,
+    CAST(ROUND(a.desconto * 100) AS INT64) AS desconto_centavos,
+    CAST(ROUND(SUM(i.valor_item) OVER (PARTITION BY a.id_atendimento) * 100) AS INT64) AS base_centavos
+  FROM ${ref("stg_atendimentos")} a
+  JOIN ${ref("stg_procedimentos_itens")} i USING (id_atendimento)
+),
+rateio AS (
+  -- 2. DIV calcula a parcela inteira do desconto; MOD mede o resto de cada divisão.
+  -- Ordenar pelos maiores restos define quem recebe os centavos que faltarem.
+  -- O ID desempata para manter o resultado repetível. Base zero é tratada aqui e testada na origem.
+  SELECT
+    *,
+    IF(base_centavos = 0, 0, DIV(desconto_centavos * valor_item_centavos, base_centavos)) AS desconto_base,
+    IF(base_centavos = 0, 0, MOD(desconto_centavos * valor_item_centavos, base_centavos)) AS resto,
+    ROW_NUMBER() OVER (PARTITION BY id_atendimento ORDER BY
+      IF(base_centavos = 0, 0, MOD(desconto_centavos * valor_item_centavos, base_centavos)) DESC, id_item
+    ) AS ordem_resto
+  FROM itens
+),
+rateio_final AS (
+  -- 3. Distribuir um centavo extra aos primeiros itens até fechar o desconto do atendimento.
+  SELECT
+    *,
+    desconto_base + IF(
+      ordem_resto <= desconto_centavos - SUM(desconto_base) OVER (PARTITION BY id_atendimento),
+      1, 0
+    ) AS desconto_item_centavos
+  FROM rateio
+)
+-- 4. Converter o desconto para reais e registrar as SKs que ligam o item às dimensões.
+SELECT
+  ROW_NUMBER() OVER (ORDER BY r.id_atendimento, r.id_item) AS sk_item,
+  r.id_atendimento,
+  r.id_item,
+  -- Sem versão conhecida no instante do evento, usar a SK reservada para histórico desconhecido.
+  -- Se essa SK não existir, a assertion de integridade referencial sinaliza o problema.
+  COALESCE(p.sk_paciente, CONCAT(r.id_paciente, '_0')) AS sk_paciente,
+  proc.sk_procedimento,
+  u.sk_unidade,
+  m.sk_medico,
+  d.sk_data,
+  c.sk_contexto_atendimento,
+  r.data_hora_atendimento,
+  r.valor_item AS valor_bruto_item,
+  CAST(r.desconto_item_centavos AS NUMERIC) / 100 AS desconto_rateado_item,
+  r.valor_item - CAST(r.desconto_item_centavos AS NUMERIC) / 100 AS valor_liquido_item
+FROM rateio_final r
+LEFT JOIN ${ref("dim_paciente")} p
+  -- Início inclusivo e fim exclusivo evitam usar duas versões no instante da mudança.
+  ON r.id_paciente = p.id_paciente
+ AND p.historico_desconhecido = FALSE
+ AND r.data_hora_atendimento >= p.inicio_vigencia
+ AND (p.fim_vigencia IS NULL OR r.data_hora_atendimento < p.fim_vigencia)
+LEFT JOIN ${ref("dim_procedimento")} proc USING (codigo_procedimento)
+LEFT JOIN ${ref("dim_unidade")} u USING (id_unidade)
+LEFT JOIN ${ref("dim_medico")} m USING (id_medico_executante)
+LEFT JOIN ${ref("dim_data")} d ON d.data = DATE(r.data_hora_atendimento)
+LEFT JOIN ${ref("dim_contexto_atendimento")} c
+  ON c.tipo_atendimento = r.tipo_atendimento AND c.status = r.status

@@ -1,0 +1,16 @@
+config {
+  ...documentacao.tabela("dim_procedimento", ["sk_procedimento", "codigo_procedimento", "nome_procedimento"]),
+  // Objetivo: Criar uma linha por código de procedimento para análise dos serviços.
+  type: "table",
+  schema: "analytics",
+  assertions: { uniqueKey: ["sk_procedimento"], nonNull: ["sk_procedimento", "codigo_procedimento"] }
+}
+
+-- A SK sequencial segue a ordem dos códigos. A fato é reconstruída no mesmo fluxo.
+-- MIN escolhe um nome por código; conflitos de nomes ainda exigem validação adicional.
+SELECT
+  ROW_NUMBER() OVER (ORDER BY codigo_procedimento) AS sk_procedimento,
+  codigo_procedimento,
+  MIN(nome_procedimento) AS nome_procedimento
+FROM ${ref("stg_procedimentos_itens")}
+GROUP BY codigo_procedimento

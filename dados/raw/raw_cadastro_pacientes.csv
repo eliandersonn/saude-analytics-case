@@ -1,0 +1,14 @@
+id_paciente,nome,plano_saude,cidade,data_atualizacao
+PAC_001,Mariana Souza Ribeiro,Unimed Premium,São Paulo,2024-01-10 08:30:00
+PAC_001,Mariana Souza Ribeiro,Bradesco Saúde Top,São Paulo,2024-06-15 14:20:00
+PAC_002,Carlos Eduardo Lima,Amil Bronze,Campinas,2023-11-05 09:00:00
+PAC_002,Carlos Eduardo Lima,Amil Prata,São Paulo,2024-03-20 11:15:00
+PAC_003,Beatriz Mendes Castro,SulAmérica Especial,Rio de Janeiro,2024-01-02 10:00:00
+PAC_004,Rodrigo Alves Pereira,Particular,Belo Horizonte,2023-08-12 16:45:00
+PAC_005,Fernanda Costa Silveira,Porto Seguro Ouro,Curitiba,2024-02-14 13:10:00
+PAC_006,Gabriel Martins Rocha,Unimed Básico,Porto Alegre,2023-12-01 08:00:00
+PAC_006,Gabriel Martins Rocha,Unimed Básico,Florianópolis,2024-05-10 17:30:00
+PAC_007,Juliana Barbosa Dias,NotreDame Intermédica,Guarulhos,2024-01-25 12:00:00
+PAC_008,Lucas Ferreira Gomes,Bradesco Saúde Efetivo,Santo André,2024-04-01 10:30:00
+PAC_009,Camila Nunes Carvalho,SulAmérica Direto,Niterói,2024-03-11 15:40:00
+PAC_010,Rafael Vieira Pires,Particular,São Paulo,2024-01-18 09:20:00

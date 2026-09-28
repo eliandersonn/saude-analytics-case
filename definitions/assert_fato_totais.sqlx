@@ -1,0 +1,13 @@
+config { description: documentacao.assertions["assert_fato_totais"], type: "assertion", schema: "analytics_assertions" }
+
+-- Objetivo: Conferir se os itens preservam os totais financeiros de cada atendimento.
+-- Uma assertion é aprovada quando esta consulta retorna zero linhas.
+-- Agrupar por atendimento evita que diferenças entre atendimentos se anulem no total geral.
+SELECT a.id_atendimento
+FROM ${ref("stg_atendimentos")} a
+LEFT JOIN ${ref("fato_atendimento_item")} f USING (id_atendimento)
+GROUP BY a.id_atendimento, a.valor_bruto, a.desconto, a.valor_liquido
+HAVING COUNT(f.id_item) = 0
+    OR SUM(f.valor_bruto_item) != a.valor_bruto
+    OR SUM(f.desconto_rateado_item) != a.desconto
+    OR SUM(f.valor_liquido_item) != a.valor_liquido

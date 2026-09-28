@@ -1,0 +1,156 @@
+id_item,id_atendimento,codigo_procedimento,nome_procedimento,id_medico_executante,valor_item
+ITM_10001,ATD_2001,PRC_009,Eletrocardiograma,MED_110,95.0
+ITM_10002,ATD_2002,PRC_009,Eletrocardiograma,MED_112,95.0
+ITM_10003,ATD_2003,PRC_003,Ressonância Magnética Crânio,MED_106,850.0
+ITM_10004,ATD_2004,PRC_002,Glicemia de Jejum,MED_113,25.0
+ITM_10005,ATD_2004,PRC_006,Consulta Cardiologia,MED_101,350.0
+ITM_10006,ATD_2004,PRC_009,Eletrocardiograma,MED_112,95.0
+ITM_10007,ATD_2004,PRC_005,Ultrassonografia Abdômen Total,MED_108,220.0
+ITM_10008,ATD_2005,PRC_010,Perfil Lipídico Completo,MED_111,65.0
+ITM_10009,ATD_2005,PRC_004,Tomografia Computadorizada Tórax,MED_104,550.0
+ITM_10010,ATD_2005,PRC_002,Glicemia de Jejum,MED_113,25.0
+ITM_10011,ATD_2006,PRC_003,Ressonância Magnética Crânio,MED_111,850.0
+ITM_10012,ATD_2006,PRC_006,Consulta Cardiologia,MED_105,350.0
+ITM_10013,ATD_2006,PRC_009,Eletrocardiograma,MED_112,95.0
+ITM_10014,ATD_2007,PRC_008,Consulta Ortopedia,MED_111,350.0
+ITM_10015,ATD_2007,PRC_007,Consulta Clínica Geral,MED_112,280.0
+ITM_10016,ATD_2008,PRC_004,Tomografia Computadorizada Tórax,MED_113,550.0
+ITM_10017,ATD_2009,PRC_004,Tomografia Computadorizada Tórax,MED_111,550.0
+ITM_10018,ATD_2009,PRC_008,Consulta Ortopedia,MED_108,350.0
+ITM_10019,ATD_2009,PRC_007,Consulta Clínica Geral,MED_103,280.0
+ITM_10020,ATD_2010,PRC_010,Perfil Lipídico Completo,MED_109,65.0
+ITM_10021,ATD_2010,PRC_007,Consulta Clínica Geral,MED_108,280.0
+ITM_10022,ATD_2010,PRC_006,Consulta Cardiologia,MED_102,350.0
+ITM_10023,ATD_2010,PRC_002,Glicemia de Jejum,MED_113,25.0
+ITM_10024,ATD_2011,PRC_010,Perfil Lipídico Completo,MED_109,65.0
+ITM_10025,ATD_2011,PRC_002,Glicemia de Jejum,MED_105,25.0
+ITM_10026,ATD_2011,PRC_007,Consulta Clínica Geral,MED_109,280.0
+ITM_10027,ATD_2011,PRC_004,Tomografia Computadorizada Tórax,MED_114,550.0
+ITM_10028,ATD_2012,PRC_002,Glicemia de Jejum,MED_108,25.0
+ITM_10029,ATD_2012,PRC_005,Ultrassonografia Abdômen Total,MED_101,220.0
+ITM_10030,ATD_2012,PRC_007,Consulta Clínica Geral,MED_112,280.0
+ITM_10031,ATD_2013,PRC_009,Eletrocardiograma,MED_113,95.0
+ITM_10032,ATD_2013,PRC_004,Tomografia Computadorizada Tórax,MED_103,550.0
+ITM_10033,ATD_2013,PRC_003,Ressonância Magnética Crânio,MED_109,850.0
+ITM_10034,ATD_2014,PRC_005,Ultrassonografia Abdômen Total,MED_110,220.0
+ITM_10035,ATD_2014,PRC_004,Tomografia Computadorizada Tórax,MED_102,550.0
+ITM_10036,ATD_2014,PRC_001,Hemograma Completo,MED_102,45.0
+ITM_10037,ATD_2015,PRC_009,Eletrocardiograma,MED_104,95.0
+ITM_10038,ATD_2015,PRC_003,Ressonância Magnética Crânio,MED_109,850.0
+ITM_10039,ATD_2015,PRC_005,Ultrassonografia Abdômen Total,MED_113,220.0
+ITM_10040,ATD_2015,PRC_008,Consulta Ortopedia,MED_112,350.0
+ITM_10041,ATD_2016,PRC_002,Glicemia de Jejum,MED_101,25.0
+ITM_10042,ATD_2016,PRC_004,Tomografia Computadorizada Tórax,MED_110,550.0
+ITM_10043,ATD_2016,PRC_009,Eletrocardiograma,MED_109,95.0
+ITM_10044,ATD_2016,PRC_001,Hemograma Completo,MED_104,45.0
+ITM_10045,ATD_2017,PRC_002,Glicemia de Jejum,MED_102,25.0
+ITM_10046,ATD_2017,PRC_001,Hemograma Completo,MED_109,45.0
+ITM_10047,ATD_2018,PRC_004,Tomografia Computadorizada Tórax,MED_102,550.0
+ITM_10048,ATD_2018,PRC_008,Consulta Ortopedia,MED_111,350.0
+ITM_10049,ATD_2018,PRC_007,Consulta Clínica Geral,MED_107,280.0
+ITM_10050,ATD_2018,PRC_002,Glicemia de Jejum,MED_106,25.0
+ITM_10051,ATD_2019,PRC_001,Hemograma Completo,MED_112,45.0
+ITM_10052,ATD_2020,PRC_007,Consulta Clínica Geral,MED_108,280.0
+ITM_10053,ATD_2020,PRC_003,Ressonância Magnética Crânio,MED_104,850.0
+ITM_10054,ATD_2021,PRC_002,Glicemia de Jejum,MED_103,25.0
+ITM_10055,ATD_2022,PRC_003,Ressonância Magnética Crânio,MED_101,850.0
+ITM_10056,ATD_2023,PRC_003,Ressonância Magnética Crânio,MED_110,850.0
+ITM_10057,ATD_2023,PRC_004,Tomografia Computadorizada Tórax,MED_112,550.0
+ITM_10058,ATD_2023,PRC_005,Ultrassonografia Abdômen Total,MED_109,220.0
+ITM_10059,ATD_2023,PRC_002,Glicemia de Jejum,MED_101,25.0
+ITM_10060,ATD_2024,PRC_001,Hemograma Completo,MED_114,45.0
+ITM_10061,ATD_2024,PRC_009,Eletrocardiograma,MED_103,95.0
+ITM_10062,ATD_2025,PRC_010,Perfil Lipídico Completo,MED_110,65.0
+ITM_10063,ATD_2026,PRC_005,Ultrassonografia Abdômen Total,MED_105,220.0
+ITM_10064,ATD_2026,PRC_004,Tomografia Computadorizada Tórax,MED_107,550.0
+ITM_10065,ATD_2026,PRC_006,Consulta Cardiologia,MED_103,350.0
+ITM_10066,ATD_2027,PRC_010,Perfil Lipídico Completo,MED_109,65.0
+ITM_10067,ATD_2027,PRC_002,Glicemia de Jejum,MED_105,25.0
+ITM_10068,ATD_2027,PRC_009,Eletrocardiograma,MED_103,95.0
+ITM_10069,ATD_2027,PRC_005,Ultrassonografia Abdômen Total,MED_106,220.0
+ITM_10070,ATD_2028,PRC_010,Perfil Lipídico Completo,MED_111,65.0
+ITM_10071,ATD_2028,PRC_009,Eletrocardiograma,MED_102,95.0
+ITM_10072,ATD_2028,PRC_001,Hemograma Completo,MED_103,45.0
+ITM_10073,ATD_2029,PRC_010,Perfil Lipídico Completo,MED_111,65.0
+ITM_10074,ATD_2029,PRC_004,Tomografia Computadorizada Tórax,MED_111,550.0
+ITM_10075,ATD_2029,PRC_006,Consulta Cardiologia,MED_114,350.0
+ITM_10076,ATD_2030,PRC_002,Glicemia de Jejum,MED_111,25.0
+ITM_10077,ATD_2031,PRC_003,Ressonância Magnética Crânio,MED_102,850.0
+ITM_10078,ATD_2031,PRC_008,Consulta Ortopedia,MED_102,350.0
+ITM_10079,ATD_2031,PRC_007,Consulta Clínica Geral,MED_112,280.0
+ITM_10080,ATD_2032,PRC_003,Ressonância Magnética Crânio,MED_106,850.0
+ITM_10081,ATD_2032,PRC_001,Hemograma Completo,MED_104,45.0
+ITM_10082,ATD_2032,PRC_005,Ultrassonografia Abdômen Total,MED_111,220.0
+ITM_10083,ATD_2032,PRC_010,Perfil Lipídico Completo,MED_104,65.0
+ITM_10084,ATD_2033,PRC_003,Ressonância Magnética Crânio,MED_101,850.0
+ITM_10085,ATD_2033,PRC_010,Perfil Lipídico Completo,MED_103,65.0
+ITM_10086,ATD_2034,PRC_002,Glicemia de Jejum,MED_114,25.0
+ITM_10087,ATD_2034,PRC_007,Consulta Clínica Geral,MED_108,280.0
+ITM_10088,ATD_2035,PRC_004,Tomografia Computadorizada Tórax,MED_107,550.0
+ITM_10089,ATD_2035,PRC_001,Hemograma Completo,MED_106,45.0
+ITM_10090,ATD_2036,PRC_001,Hemograma Completo,MED_110,45.0
+ITM_10091,ATD_2036,PRC_002,Glicemia de Jejum,MED_105,25.0
+ITM_10092,ATD_2036,PRC_005,Ultrassonografia Abdômen Total,MED_101,220.0
+ITM_10093,ATD_2037,PRC_010,Perfil Lipídico Completo,MED_105,65.0
+ITM_10094,ATD_2037,PRC_009,Eletrocardiograma,MED_101,95.0
+ITM_10095,ATD_2037,PRC_002,Glicemia de Jejum,MED_112,25.0
+ITM_10096,ATD_2037,PRC_004,Tomografia Computadorizada Tórax,MED_107,550.0
+ITM_10097,ATD_2038,PRC_006,Consulta Cardiologia,MED_102,350.0
+ITM_10098,ATD_2038,PRC_007,Consulta Clínica Geral,MED_111,280.0
+ITM_10099,ATD_2039,PRC_009,Eletrocardiograma,MED_107,95.0
+ITM_10100,ATD_2039,PRC_005,Ultrassonografia Abdômen Total,MED_112,220.0
+ITM_10101,ATD_2039,PRC_007,Consulta Clínica Geral,MED_105,280.0
+ITM_10102,ATD_2040,PRC_010,Perfil Lipídico Completo,MED_107,65.0
+ITM_10103,ATD_2040,PRC_005,Ultrassonografia Abdômen Total,MED_109,220.0
+ITM_10104,ATD_2041,PRC_008,Consulta Ortopedia,MED_109,350.0
+ITM_10105,ATD_2041,PRC_010,Perfil Lipídico Completo,MED_108,65.0
+ITM_10106,ATD_2041,PRC_009,Eletrocardiograma,MED_113,95.0
+ITM_10107,ATD_2042,PRC_002,Glicemia de Jejum,MED_113,25.0
+ITM_10108,ATD_2042,PRC_004,Tomografia Computadorizada Tórax,MED_104,550.0
+ITM_10109,ATD_2042,PRC_005,Ultrassonografia Abdômen Total,MED_103,220.0
+ITM_10110,ATD_2043,PRC_008,Consulta Ortopedia,MED_111,350.0
+ITM_10111,ATD_2044,PRC_001,Hemograma Completo,MED_104,45.0
+ITM_10112,ATD_2044,PRC_002,Glicemia de Jejum,MED_103,25.0
+ITM_10113,ATD_2045,PRC_008,Consulta Ortopedia,MED_103,350.0
+ITM_10114,ATD_2046,PRC_010,Perfil Lipídico Completo,MED_103,65.0
+ITM_10115,ATD_2046,PRC_009,Eletrocardiograma,MED_112,95.0
+ITM_10116,ATD_2046,PRC_007,Consulta Clínica Geral,MED_114,280.0
+ITM_10117,ATD_2046,PRC_008,Consulta Ortopedia,MED_108,350.0
+ITM_10118,ATD_2047,PRC_004,Tomografia Computadorizada Tórax,MED_104,550.0
+ITM_10119,ATD_2047,PRC_005,Ultrassonografia Abdômen Total,MED_105,220.0
+ITM_10120,ATD_2047,PRC_008,Consulta Ortopedia,MED_106,350.0
+ITM_10121,ATD_2047,PRC_001,Hemograma Completo,MED_106,45.0
+ITM_10122,ATD_2048,PRC_004,Tomografia Computadorizada Tórax,MED_107,550.0
+ITM_10123,ATD_2048,PRC_002,Glicemia de Jejum,MED_106,25.0
+ITM_10124,ATD_2049,PRC_010,Perfil Lipídico Completo,MED_106,65.0
+ITM_10125,ATD_2049,PRC_001,Hemograma Completo,MED_105,45.0
+ITM_10126,ATD_2049,PRC_007,Consulta Clínica Geral,MED_113,280.0
+ITM_10127,ATD_2049,PRC_004,Tomografia Computadorizada Tórax,MED_107,550.0
+ITM_10128,ATD_2050,PRC_004,Tomografia Computadorizada Tórax,MED_101,550.0
+ITM_10129,ATD_2050,PRC_005,Ultrassonografia Abdômen Total,MED_107,220.0
+ITM_10130,ATD_2050,PRC_007,Consulta Clínica Geral,MED_106,280.0
+ITM_10131,ATD_2050,PRC_010,Perfil Lipídico Completo,MED_111,65.0
+ITM_10132,ATD_2051,PRC_010,Perfil Lipídico Completo,MED_103,65.0
+ITM_10133,ATD_2051,PRC_001,Hemograma Completo,MED_114,45.0
+ITM_10134,ATD_2051,PRC_002,Glicemia de Jejum,MED_108,25.0
+ITM_10135,ATD_2051,PRC_006,Consulta Cardiologia,MED_103,350.0
+ITM_10136,ATD_2052,PRC_007,Consulta Clínica Geral,MED_114,280.0
+ITM_10137,ATD_2052,PRC_005,Ultrassonografia Abdômen Total,MED_102,220.0
+ITM_10138,ATD_2052,PRC_010,Perfil Lipídico Completo,MED_108,65.0
+ITM_10139,ATD_2053,PRC_001,Hemograma Completo,MED_104,45.0
+ITM_10140,ATD_2054,PRC_010,Perfil Lipídico Completo,MED_108,65.0
+ITM_10141,ATD_2055,PRC_003,Ressonância Magnética Crânio,MED_102,850.0
+ITM_10142,ATD_2056,PRC_007,Consulta Clínica Geral,MED_112,280.0
+ITM_10143,ATD_2056,PRC_004,Tomografia Computadorizada Tórax,MED_114,550.0
+ITM_10144,ATD_2056,PRC_002,Glicemia de Jejum,MED_111,25.0
+ITM_10145,ATD_2056,PRC_005,Ultrassonografia Abdômen Total,MED_104,220.0
+ITM_10146,ATD_2057,PRC_006,Consulta Cardiologia,MED_111,350.0
+ITM_10147,ATD_2058,PRC_008,Consulta Ortopedia,MED_112,350.0
+ITM_10148,ATD_2058,PRC_002,Glicemia de Jejum,MED_103,25.0
+ITM_10149,ATD_2058,PRC_007,Consulta Clínica Geral,MED_107,280.0
+ITM_10150,ATD_2058,PRC_003,Ressonância Magnética Crânio,MED_103,850.0
+ITM_10151,ATD_2059,PRC_008,Consulta Ortopedia,MED_114,350.0
+ITM_10152,ATD_2059,PRC_007,Consulta Clínica Geral,MED_102,280.0
+ITM_10153,ATD_2059,PRC_005,Ultrassonografia Abdômen Total,MED_105,220.0
+ITM_10154,ATD_2059,PRC_003,Ressonância Magnética Crânio,MED_108,850.0
+ITM_10155,ATD_2060,PRC_008,Consulta Ortopedia,MED_103,350.0

@@ -1,0 +1,8 @@
+config {
+  ...documentacao.tabela("raw_cadastro_pacientes", ["id_paciente", "nome", "plano_saude", "cidade", "data_atualizacao"]),
+  // Objetivo: Declarar o log cadastral que será usado para construir o histórico do paciente.
+  type: "declaration",
+  database: dataform.projectConfig.defaultDatabase,
+  schema: dataform.projectConfig.vars.rawDataset || "raw",
+  name: "raw_cadastro_pacientes"
+}

@@ -1,0 +1,22 @@
+config { description: documentacao.assertions["assert_valores_origem"], type: "assertion", schema: "analytics_assertions" }
+
+-- Objetivo: Detectar valores inválidos e divergências entre cabeçalho e itens da origem.
+-- Uma assertion é aprovada quando esta consulta retorna zero linhas.
+-- Somar os itens e comparar com o cabeçalho usando valores NUMERIC, sem tolerância decimal.
+SELECT a.id_atendimento
+FROM ${ref("stg_atendimentos")} a
+LEFT JOIN (
+  SELECT id_atendimento, SUM(valor_item) AS soma_itens
+  FROM ${ref("stg_procedimentos_itens")}
+  GROUP BY id_atendimento
+) i USING (id_atendimento)
+WHERE a.valor_bruto IS NULL OR a.desconto IS NULL OR a.valor_liquido IS NULL
+   OR a.valor_bruto < 0 OR a.desconto < 0 OR a.desconto > a.valor_bruto
+   OR a.valor_bruto != a.desconto + a.valor_liquido
+   OR a.valor_bruto != i.soma_itens
+   -- Também reprovar o atendimento se qualquer item tiver valor nulo, zero ou negativo.
+   OR EXISTS (
+     SELECT 1 FROM ${ref("stg_procedimentos_itens")} x
+     WHERE x.id_atendimento = a.id_atendimento
+       AND (x.valor_item IS NULL OR x.valor_item <= 0)
+   )
